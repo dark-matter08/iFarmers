@@ -10,7 +10,13 @@
       "@react-native-firebase/app",
       "@react-native-firebase/auth",
       "@react-native-firebase/perf",
-      "@react-native-firebase/crashlytics"
+      "@react-native-firebase/crashlytics",
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+        }
+      ]
     ],
     "splash": {
       "image": "./assets/splash.png",
@@ -22,12 +28,18 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.ifarmers",
       "googleServicesFile": "./google-config/GoogleService-Info.plist",
-      "useFrameworks": "static"
+      "useFrameworks": "static",
+      "config": {
+        "googleMapsApiKey": "AIzaSyDdRXAiBTcVpM-97pDb9dkNdH4J-klXcCg"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#ffffff",
+        "config": {
+          "googleMapsApiKey": "AIzaSyDdRXAiBTcVpM-97pDb9dkNdH4J-klXcCg"
+        }
       },
       "package": "com.ifarmers",
       "googleServicesFile": "./google-config/google-services.json"

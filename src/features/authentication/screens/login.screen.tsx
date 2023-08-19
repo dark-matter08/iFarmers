@@ -12,11 +12,11 @@ import theme from '../../../infrastructure/theme';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Button } from '../../../components/botton.component';
 import LottieView from 'lottie-react-native';
-import auth from '@react-native-firebase/auth';
+// import auth from '@react-native-firebase/auth';
 import { showToast } from '../../../utils/showToast';
+// import auth from '@react-native-firebase/auth';
 
 export const LoginScreen = () => {
-  console.log('we at login screen');
   const { colors } = useTheme();
   const [phoneNumber, setPhoneNumber] = useState('');
   const [dialCode, setDialCode] = useState('');
@@ -33,36 +33,36 @@ export const LoginScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isCodeConfirming, setIsCodeConfirming] = useState(false);
 
-  const onAuthStateChanged = (user: any) => {
-    if (user) {
-      setCodeFieldVisible(false);
-      setIsLoading(true);
-    }
-  };
+  // const onAuthStateChanged = (user: any) => {
+  //   if (user) {
+  //     setCodeFieldVisible(false);
+  //     setIsLoading(true);
+  //   }
+  // };
 
-  const signInWithPhoneNumber = async (phoneNumber: any) => {
-    console.log(auth);
+  // const signInWithPhoneNumber = async (phoneNumber: any) => {
+  //   console.log(auth);
 
-    try {
-      const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
-      setConfirm(confirmation);
-    } catch (error) {
-      console.log(error);
-      showToast({
-        title: 'Error Initializing',
-        message: 'There was an erro trying to sign in',
-        type: 'error',
-      });
-    }
-  };
+  //   try {
+  //     const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+  //     setConfirm(confirmation);
+  //   } catch (error) {
+  //     console.log(error);
+  //     showToast({
+  //       title: 'Error Initializing',
+  //       message: 'There was an erro trying to sign in',
+  //       type: 'error',
+  //     });
+  //   }
+  // };
 
-  const confirmCode = async () => {
-    try {
-      await confirm.confirm(code);
-    } catch (error) {
-      console.log('Invalid code.');
-    }
-  };
+  // const confirmCode = async () => {
+  //   try {
+  //     await confirm.confirm(code);
+  //   } catch (error) {
+  //     console.log('Invalid code.');
+  //   }
+  // };
 
   // useEffect(() => {
   //   const subscriber = auth().onAuthStateChanged(onAuthStateChanged);

@@ -52,7 +52,7 @@ const Navigation = () => {
 
   return (
     <NavigationContainer theme={isDarkMode ? MyDarkTheme : LightTheme}>
-      {!isAuthenticated ? <AuthNavigator /> : <AppNavigator />}
+      {isAuthenticated ? <AuthNavigator /> : <AppNavigator />}
     </NavigationContainer>
   );
 };
