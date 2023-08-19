@@ -36,10 +36,9 @@ const API_KEY = 'AIzaSyB1-zWe-Xc_GKGtkqSa48POSP0TxJaRK30';
 export const HomeScreen = () => {
   const { colors } = useTheme();
   const [currentLocation, setCurrentLocation] = useState<any>(null);
-  const [status, requestPermission] = Location.useForegroundPermissions();
   const [searchQ, setSearchQ] = useState('');
-  const mapRef = useRef<MapView>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const mapRef = useRef<MapView>(null);
 
   const getCurrentLocation = async () => {
     try {
