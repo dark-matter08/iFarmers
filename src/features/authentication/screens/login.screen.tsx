@@ -12,8 +12,9 @@ import theme from '../../../infrastructure/theme';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Button } from '../../../components/botton.component';
 import LottieView from 'lottie-react-native';
-// import auth from '@react-native-firebase/auth';
+import auth from '@react-native-firebase/auth';
 import { showToast } from '../../../utils/showToast';
+import { OTPInput } from '../components/Input/OTPInput.component';
 
 export const LoginScreen = () => {
   const { colors } = useTheme();
@@ -31,29 +32,37 @@ export const LoginScreen = () => {
   const [codeFieldVisible, setCodeFieldVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isCodeConfirming, setIsCodeConfirming] = useState(false);
+  const [pinReady, setPinReady] = useState(false);
+  const MAX_CODE_LENGTH = 5;
 
-  // const onAuthStateChanged = (user: any) => {
-  //   if (user) {
-  //     setCodeFieldVisible(false);
-  //     setIsLoading(true);
-  //   }
-  // };
+  const onAuthStateChanged = (user: any) => {
+    console.log(user);
 
-  // const signInWithPhoneNumber = async (phoneNumber: any) => {
-  //   console.log(auth);
+    if (user) {
+      setCodeFieldVisible(false);
+      setIsLoading(true);
+    }
+  };
 
-  //   try {
-  //     const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
-  //     setConfirm(confirmation);
-  //   } catch (error) {
-  //     console.log(error);
-  //     showToast({
-  //       title: 'Error Initializing',
-  //       message: 'There was an erro trying to sign in',
-  //       type: 'error',
-  //     });
-  //   }
-  // };
+  const signInWithPhoneNumber = async (phoneNumber: any) => {
+    console.log(phoneNumber);
+
+    setIsLoading(true);
+    try {
+      const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+      setConfirm(confirmation);
+      setIsCodeConfirming(true);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+      showToast({
+        title: 'Error Initializing',
+        message: 'There was an erro trying to sign in',
+        type: 'error',
+      });
+      setIsLoading(false);
+    }
+  };
 
   // const confirmCode = async () => {
   //   try {
@@ -63,10 +72,10 @@ export const LoginScreen = () => {
   //   }
   // };
 
-  // useEffect(() => {
-  //   const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-  //   return subscriber; // unsubscribe on unmount
-  // }, []);
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
 
   useEffect(() => {
     setDialCode(selectedValue?.dial_code);
@@ -187,7 +196,7 @@ export const LoginScreen = () => {
               paddingHorizontal: 20,
             }}>
             <TextInput
-              placeholder="Enter Phone number"
+              placeholder="Enter verification code"
               onChangeText={setCode}
               keyboardType="phone-pad"
               value={code}
@@ -204,14 +213,23 @@ export const LoginScreen = () => {
         )}
       </View>
 
+      <OTPInput
+        setPinReady={setPinReady}
+        code={code}
+        setCode={setCode}
+        maximumLength={MAX_CODE_LENGTH}
+      />
+
       {isCodeConfirming && (
         <Text
           style={{
-            fontWeight: '600',
+            fontWeight: '400',
             fontSize: 15,
             textAlign: 'center',
             alignSelf: 'center',
             color: colors.text,
+            marginTop: 20,
+            paddingHorizontal: 60,
           }}>
           We have sent you a one time pass code, input in the field above
         </Text>
@@ -231,12 +249,14 @@ export const LoginScreen = () => {
           <Button
             title="Proceed to iFarmers"
             height={65}
-            // onPress={() => signInWithPhoneNumber(`${dialCode}${phoneNumber}`)}
+            isLoading={isLoading}
+            onPress={() => signInWithPhoneNumber(`${dialCode}${phoneNumber}`)}
           />
         ) : (
           <Button
             title="Confirm Code"
             backgroundColor={theme.VIOLET}
+            isActive={!!pinReady}
             // onPress={confirmCode}
           />
         )}
