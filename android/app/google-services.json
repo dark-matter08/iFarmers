@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "523965426715",
+    "project_id": "ifarmers-dc678",
+    "storage_bucket": "ifarmers-dc678.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:523965426715:android:51439439f1f99681bcdcbe",
+        "android_client_info": {
+          "package_name": "com.ifarmers"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "523965426715-3mac8gl2o6t69ru747i5rglmbp1s2ddo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBcb8xymG5aMwXe6N15P042jh0ZySwTGM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "523965426715-3mac8gl2o6t69ru747i5rglmbp1s2ddo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

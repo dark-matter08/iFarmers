@@ -14,7 +14,6 @@ import { Button } from '../../../components/botton.component';
 import LottieView from 'lottie-react-native';
 // import auth from '@react-native-firebase/auth';
 import { showToast } from '../../../utils/showToast';
-// import auth from '@react-native-firebase/auth';
 
 export const LoginScreen = () => {
   const { colors } = useTheme();
@@ -77,7 +76,7 @@ export const LoginScreen = () => {
     <View
       style={{
         flex: 1,
-        paddingBottom: 20,
+        paddingBottom: 30,
       }}>
       {/* Header */}
       <View
@@ -232,7 +231,7 @@ export const LoginScreen = () => {
           <Button
             title="Proceed to iFarmers"
             height={65}
-            onPress={() => signInWithPhoneNumber(`${dialCode}${phoneNumber}`)}
+            // onPress={() => signInWithPhoneNumber(`${dialCode}${phoneNumber}`)}
           />
         ) : (
           <Button
