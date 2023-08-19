@@ -22,7 +22,7 @@ export const OTPInputContainer = styled.Pressable`
 `;
 
 export const OTPInputBox = styled.View`
-  border-color: ${theme.GREY_5 + '68'};
+  border-color: ${theme.VIOLET};
   background-color: ${theme.GREY_5 + '68'};
   min-width: 16%;
   max-width: 25%;
@@ -35,14 +35,14 @@ export const OTPInputBox = styled.View`
 `;
 
 export const OTPInputBoxFocused = styled.View`
-  border-color: ${theme.GREEN_MED}
-  background-color: ${theme.GREY_5 + '68'}
+  border-color: ${theme.GREEN_MED};
+  background-color: ${theme.GREY_5 + '68'};
   width: 16%;
   border-width: 2px;
   border-radius: 10px;
   flex-direction: row;
   justify-content: center;
-  align-items: center
+  align-items: center;
 `;
 
 export const OTPInputText = styled.Text`

@@ -16,7 +16,11 @@ import auth from '@react-native-firebase/auth';
 import { showToast } from '../../../utils/showToast';
 import { OTPInput } from '../components/Input/OTPInput.component';
 
-export const LoginScreen = () => {
+interface ScreenProps {
+  navigation: any;
+}
+
+export const LoginScreen = ({ navigation }: ScreenProps) => {
   const { colors } = useTheme();
   const [phoneNumber, setPhoneNumber] = useState('');
   const [dialCode, setDialCode] = useState('');
@@ -29,20 +33,10 @@ export const LoginScreen = () => {
   });
   const [confirm, setConfirm] = useState<any>(null);
   const [code, setCode] = useState('');
-  const [codeFieldVisible, setCodeFieldVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isCodeConfirming, setIsCodeConfirming] = useState(false);
   const [pinReady, setPinReady] = useState(false);
-  const MAX_CODE_LENGTH = 5;
-
-  const onAuthStateChanged = (user: any) => {
-    console.log(user);
-
-    if (user) {
-      setCodeFieldVisible(false);
-      setIsLoading(true);
-    }
-  };
+  const MAX_CODE_LENGTH = 6;
 
   const signInWithPhoneNumber = async (phoneNumber: any) => {
     console.log(phoneNumber);
@@ -57,25 +51,23 @@ export const LoginScreen = () => {
       console.log(error);
       showToast({
         title: 'Error Initializing',
-        message: 'There was an erro trying to sign in',
+        message: 'There was an error trying to sign in',
         type: 'error',
       });
       setIsLoading(false);
     }
   };
 
-  // const confirmCode = async () => {
-  //   try {
-  //     await confirm.confirm(code);
-  //   } catch (error) {
-  //     console.log('Invalid code.');
-  //   }
-  // };
+  const confirmCode = async () => {
+    setIsLoading(true);
 
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
-  }, []);
+    try {
+      await confirm.confirm(code);
+      navigation.navigate('details');
+    } catch (error) {
+      console.log('Invalid code.');
+    }
+  };
 
   useEffect(() => {
     setDialCode(selectedValue?.dial_code);
@@ -186,39 +178,38 @@ export const LoginScreen = () => {
             />
           </View>
         ) : (
-          <View
-            style={{
-              flexDirection: 'row',
-              height: 55,
-              width: '100%',
-              backgroundColor: theme.GREY_5,
-              borderRadius: 10,
-              paddingHorizontal: 20,
-            }}>
-            <TextInput
-              placeholder="Enter verification code"
-              onChangeText={setCode}
-              keyboardType="phone-pad"
-              value={code}
-              style={{
-                flex: 1,
-                height: '100%',
-                fontSize: theme.FONT_SIZE_NORMAL + 2,
-                color: theme.DARK,
-                paddingVertical: 0,
-                paddingHorizontal: 8,
-              }}
-            />
-          </View>
+          // <View
+          //   style={{
+          //     flexDirection: 'row',
+          //     height: 55,
+          //     width: '100%',
+          //     backgroundColor: theme.GREY_5,
+          //     borderRadius: 10,
+          //     paddingHorizontal: 20,
+          //   }}>
+          //   <TextInput
+          //     placeholder="Enter verification code"
+          //     onChangeText={setCode}
+          //     keyboardType="phone-pad"
+          //     value={code}
+          //     style={{
+          //       flex: 1,
+          //       height: '100%',
+          //       fontSize: theme.FONT_SIZE_NORMAL + 2,
+          //       color: theme.DARK,
+          //       paddingVertical: 0,
+          //       paddingHorizontal: 8,
+          //     }}
+          //   />
+          // </View>
+          <OTPInput
+            setPinReady={setPinReady}
+            code={code}
+            setCode={setCode}
+            maximumLength={MAX_CODE_LENGTH}
+          />
         )}
       </View>
-
-      <OTPInput
-        setPinReady={setPinReady}
-        code={code}
-        setCode={setCode}
-        maximumLength={MAX_CODE_LENGTH}
-      />
 
       {isCodeConfirming && (
         <Text
@@ -240,14 +231,14 @@ export const LoginScreen = () => {
       {/* BUtton */}
       <View
         style={{
-          width: '90%',
+          width: '80%',
           justifyContent: 'center',
           alignItems: 'center',
           alignSelf: 'center',
         }}>
         {!isCodeConfirming ? (
           <Button
-            title="Proceed to iFarmers"
+            title="Proceed"
             height={65}
             isLoading={isLoading}
             onPress={() => signInWithPhoneNumber(`${dialCode}${phoneNumber}`)}
@@ -256,8 +247,9 @@ export const LoginScreen = () => {
           <Button
             title="Confirm Code"
             backgroundColor={theme.VIOLET}
-            isActive={!!pinReady}
-            // onPress={confirmCode}
+            isActive={pinReady}
+            isLoading={isLoading}
+            onPress={confirmCode}
           />
         )}
       </View>

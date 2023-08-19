@@ -3,7 +3,8 @@ import { AnimatedTabBarNavigator } from 'react-native-animated-nav-tab-bar';
 import theme from '../theme';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { HomeScreen } from '../../features/home/screens/home.screen';
-import { ParamListBase, RouteProp } from '@react-navigation/native';
+import { ParamListBase, RouteProp, useTheme } from '@react-navigation/native';
+import { useColorScheme } from 'react-native';
 const Tab = AnimatedTabBarNavigator();
 
 export interface TabIconParams {
@@ -18,14 +19,15 @@ interface ScreenOptionsProps {
 }
 
 type TabIcon = {
-  [key: string]: 'md-home' | 'map' | 'man-outline';
+  [key: string]: 'md-home' | 'list' | 'man-outline' | 'heart';
 };
 
 const screenOptions = (props: ScreenOptionsProps) => {
   const TAB_ICON: TabIcon = {
     Home: 'md-home',
-    Map: 'map',
+    'My Points': 'list',
     Profile: 'man-outline',
+    Favourites: 'heart',
   };
   const name = TAB_ICON[props.route.name];
 
@@ -39,6 +41,9 @@ const screenOptions = (props: ScreenOptionsProps) => {
 };
 
 export const AppNavigator = () => {
+  const { colors } = useTheme();
+  const default_color_mode = useColorScheme();
+  const isDarkMode = default_color_mode === 'dark';
   return (
     <Tab.Navigator
       screenOptions={screenOptions}
@@ -46,15 +51,16 @@ export const AppNavigator = () => {
         activeTintColor: theme.DARK,
         inactiveTintColor: theme.GREY_2,
         tabStyle: {
-          backgroundColor: theme.GREY_6,
-          borderTopLeftRadius: 30,
-          borderTopRightRadius: 30,
+          backgroundColor: isDarkMode ? theme.DARK : theme.GREY_6,
+          // borderTopLeftRadius: 30,
+          // borderTopRightRadius: 30,
           width: '100%',
         },
       }}
       appearance={{ floating: false }}>
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Map" component={HomeScreen} />
+      <Tab.Screen name="My Points" component={HomeScreen} />
+      <Tab.Screen name="Favourites" component={HomeScreen} />
       <Tab.Screen name="Profile" component={HomeScreen} />
     </Tab.Navigator>
   );

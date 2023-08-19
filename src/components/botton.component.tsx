@@ -28,9 +28,10 @@ export const Button = (props: ButtonProps) => {
     height,
     backgroundColor,
     borderRadius,
-    isActive,
+    isActive = true,
     onPress,
   } = props;
+
   const { colors } = useTheme();
   return (
     <TouchableOpacity
@@ -39,15 +40,15 @@ export const Button = (props: ButtonProps) => {
         width: width || '100%',
         height: height || 55,
         backgroundColor:
-          !isLoading || !isActive
-            ? backgroundColor || colors.primary
-            : theme.GREY_4,
+          isLoading || !isActive
+            ? theme.GREY_4
+            : backgroundColor || colors.primary,
         borderRadius: borderRadius || 100,
         justifyContent: 'center',
         alignSelf: 'center',
       }}>
       {isLoading ? (
-        <ActivityIndicator />
+        <ActivityIndicator size={'large'} color={colors.primary} />
       ) : (
         <Text
           style={{

@@ -51,8 +51,10 @@ export const HomeScreen = () => {
 
       const location = await Location.getCurrentPositionAsync({});
       setCurrentLocation(location.coords);
+      setIsLoading(false);
     } catch (error) {
       console.log('Error getting current location:', error);
+      setIsLoading(false);
     }
   };
 
@@ -115,6 +117,7 @@ export const HomeScreen = () => {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: colors.background,
       }}>
       {currentLocation ? (
         <MapView
@@ -231,13 +234,6 @@ export const HomeScreen = () => {
             borderRadius: 30,
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: colors.background,
-            // Shadow and elevation styles
-            shadowColor: '#000',
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-            elevation: 5,
           }}>
           <Ionicons name={'search'} size={26} color={theme.FACEBOOK} />
         </TouchableOpacity>

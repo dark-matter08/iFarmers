@@ -12,6 +12,12 @@
       "@react-native-firebase/perf",
       "@react-native-firebase/crashlytics",
       [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ],
+      [
         "expo-location",
         {
           "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
@@ -30,7 +36,7 @@
       "googleServicesFile": "./google-config/GoogleService-Info.plist",
       "useFrameworks": "static",
       "config": {
-        "googleMapsApiKey": "AIzaSyDdRXAiBTcVpM-97pDb9dkNdH4J-klXcCg"
+        "googleMapsApiKey": "AIzaSyB1-zWe-Xc_GKGtkqSa48POSP0TxJaRK30"
       }
     },
     "android": {
@@ -38,7 +44,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff",
         "config": {
-          "googleMapsApiKey": "AIzaSyDdRXAiBTcVpM-97pDb9dkNdH4J-klXcCg"
+          "googleMapsApiKey": "AIzaSyB1-zWe-Xc_GKGtkqSa48POSP0TxJaRK30"
         }
       },
       "package": "com.ifarmers",
