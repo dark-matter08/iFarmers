@@ -1,23 +1,10 @@
-import React, { useContext } from 'react';
-
-// import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import React from 'react';
 import { AnimatedTabBarNavigator } from 'react-native-animated-nav-tab-bar';
-
-import { View } from 'react-native';
-
 import theme from '../theme';
-
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { HomeScreen } from '../../features/home/screens/home';
+import { HomeScreen } from '../../features/home/screens/home.screen';
+import { ParamListBase, RouteProp } from '@react-navigation/native';
 const Tab = AnimatedTabBarNavigator();
-
-interface TabIcon {
-  Home: string;
-}
-
-const TAB_ICON: TabIcon = {
-  Home: 'md-home',
-};
 
 export interface TabIconParams {
   size: number;
@@ -25,13 +12,26 @@ export interface TabIconParams {
   isFocused: boolean;
 }
 
-const screenOptions = ({ route }: any) => {
-  let iconName = route.name;
+interface ScreenOptionsProps {
+  route: RouteProp<ParamListBase>;
+  navigation?: any;
+}
+
+type TabIcon = {
+  [key: string]: 'md-home' | 'map' | 'man-outline';
+};
+
+const screenOptions = (props: ScreenOptionsProps) => {
+  const TAB_ICON: TabIcon = {
+    Home: 'md-home',
+    Map: 'map',
+    Profile: 'man-outline',
+  };
+  const name = TAB_ICON[props.route.name];
+
   return {
     tabBarIcon: (params: TabIconParams) => {
-      return (
-        <Ionicons name={iconName} size={params.size} color={params.color} />
-      );
+      return <Ionicons name={name} size={params.size} color={params.color} />;
     },
     tabBarHideOnKeyboard: true,
     headerShown: false,
@@ -43,16 +43,19 @@ export const AppNavigator = () => {
     <Tab.Navigator
       screenOptions={screenOptions}
       tabBarOptions={{
-        activeTintColor: theme.GOLD,
-        inactiveTintColor: theme.GREY_3,
+        activeTintColor: theme.DARK,
+        inactiveTintColor: theme.GREY_2,
         tabStyle: {
-          backgroundColor: theme.GREEN_MED,
-          borderTopLeftRadius: 20,
-          borderTopRightRadius: 20,
+          backgroundColor: theme.GREY_6,
+          borderTopLeftRadius: 30,
+          borderTopRightRadius: 30,
+          width: '100%',
         },
       }}
       appearance={{ floating: false }}>
       <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Map" component={HomeScreen} />
+      <Tab.Screen name="Profile" component={HomeScreen} />
     </Tab.Navigator>
   );
 };

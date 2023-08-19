@@ -28,7 +28,7 @@ export const AlertView: React.FC<AlertViewProps> = ({
             : type === 'warning'
             ? theme.GOLD
             : theme.FACEBOOK,
-        paddingTop: Platform.OS === 'ios' ? 50 : 0,
+        paddingTop: Platform.OS === 'ios' ? 50 : 30,
         width: '100%',
         borderBottomLeftRadius: 0,
         borderBottomRightRadius: 0,

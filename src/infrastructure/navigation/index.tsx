@@ -48,10 +48,11 @@ const Navigation = () => {
 
   const isDarkMode = default_color_mode === 'dark';
 
+  console.log(isAuthenticated);
+
   return (
     <NavigationContainer theme={isDarkMode ? MyDarkTheme : LightTheme}>
-      {!isAuthenticated && <AuthNavigator />}
-      {isAuthenticated && <AppNavigator />}
+      {!isAuthenticated ? <AuthNavigator /> : <AppNavigator />}
     </NavigationContainer>
   );
 };
