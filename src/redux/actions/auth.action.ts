@@ -7,11 +7,9 @@ export const setCurrentUser = (payload: any) => {
   };
 };
 
-export const logoutUser = (dispatch: any) => {
-  dispatch(
-    setCurrentUser({
-      isAuthenticated: false,
-      user: null,
-    })
-  );
+export const logoutUser = () => {
+  return {
+    type: SET_CURRENT_USER,
+    payload: null,
+  };
 };

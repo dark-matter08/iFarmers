@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import theme from '../../../infrastructure/theme';
 import auth from '@react-native-firebase/auth';
-import { storage } from '../../../../firebaseConfig';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useDispatch } from 'react-redux';
@@ -18,6 +17,7 @@ import { setCurrentUser } from '../../../redux/actions/auth.action';
 import { useTheme } from '@react-navigation/native';
 import { Button } from '../../../components/botton.component';
 import * as ImagePicker from 'expo-image-picker';
+import storage from '@react-native-firebase/storage';
 
 export const DetailsScreen = () => {
   const [selectedImage, setSelectedImage] = useState<string>();
@@ -70,44 +70,33 @@ export const DetailsScreen = () => {
       });
 
     if (selectedImage) {
-      // Create a reference to the storage location where you want to store the image
-      const response = await fetch(selectedImage);
-      const blob = await response.blob();
-
-      const filename = selectedImage.substring(
-        selectedImage.lastIndexOf('/') + 1
-      );
-      const fileRef = ref(storage, 'profile_images/' + user.uid + filename);
-
       if (user.photoURL === selectedImage) {
         dispatch(setCurrentUser(user));
         setisLoading(false);
         return;
       }
 
-      // Upload the image file to the storage location
-      uploadBytes(fileRef, blob)
-        .then(() => {
-          console.log('File uploaded successfully!');
+      const filename = selectedImage.substring(
+        selectedImage.lastIndexOf('/') + 1
+      );
+      // const fileRef = ref(storage, 'profile_images/' + user.uid + filename);
+      const reference = storage().ref('profile_images/' + user.uid + filename);
+      const task = reference.putFile(selectedImage);
+      task.then(async () => {
+        console.log('Image uploaded successfully!');
+        const url = await storage()
+          .ref('profile_images/' + user.uid + filename)
+          .getDownloadURL();
 
-          // Get the download URL of the uploaded file
-          return getDownloadURL(fileRef);
-        })
-        .then((downloadURL) => {
-          // Update the user's photoURL with the download URL of the image
-          user.updateProfile({
-            photoURL: downloadURL,
-          });
-          dispatch(setCurrentUser(user));
-          setisLoading(false);
-        })
-        .then(() => {
-          console.log('Image URL updated successfully!');
-        })
-        .catch((error) => {
-          console.error('Error updating image:', error);
-          setisLoading(false);
+        user.updateProfile({
+          photoURL: url,
         });
+        dispatch(setCurrentUser(user));
+        setisLoading(false);
+      });
+    } else {
+      dispatch(setCurrentUser(user));
+      setisLoading(false);
     }
   };
 
@@ -116,7 +105,7 @@ export const DetailsScreen = () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [4, 4],
       quality: 1,
     });
 

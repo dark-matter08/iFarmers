@@ -72,7 +72,6 @@ export const HomeScreen = () => {
 
       setIsLoading(false);
       // You can perform any additional actions with the fetched data
-      console.log(data);
     } catch (error) {
       console.log(error);
       setAllPoints([]);

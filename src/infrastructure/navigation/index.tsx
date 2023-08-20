@@ -43,12 +43,12 @@ const MyDarkTheme = {
 };
 
 const Navigation = () => {
-  const { isAuthenticated } = useSelector((state: any) => state.auth);
+  const { isAuthenticated, user } = useSelector((state: any) => state.auth);
   const default_color_mode = useColorScheme();
 
   const isDarkMode = default_color_mode === 'dark';
 
-  console.log(isAuthenticated);
+  console.log(user);
 
   return (
     <NavigationContainer theme={isDarkMode ? MyDarkTheme : LightTheme}>
