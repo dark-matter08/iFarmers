@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   ActivityIndicator,
+  DimensionValue,
   Text,
   TouchableOpacity,
   View,
@@ -13,7 +14,7 @@ interface ButtonProps {
   title?: string;
   isLoading?: boolean;
   isActive?: boolean;
-  width?: number;
+  width?: DimensionValue;
   height?: number;
   backgroundColor?: string;
   borderRadius?: number;

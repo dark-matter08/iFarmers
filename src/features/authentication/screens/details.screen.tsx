@@ -31,6 +31,7 @@ export const DetailsScreen = () => {
     if (user) {
       setName(user.displayName);
       setEmail(user.email);
+      setSelectedImage(user.photoURL);
     }
   };
 
@@ -78,6 +79,12 @@ export const DetailsScreen = () => {
       );
       const fileRef = ref(storage, 'profile_images/' + user.uid + filename);
 
+      if (user.photoURL === selectedImage) {
+        dispatch(setCurrentUser(user));
+        setisLoading(false);
+        return;
+      }
+
       // Upload the image file to the storage location
       uploadBytes(fileRef, blob)
         .then(() => {
@@ -112,8 +119,6 @@ export const DetailsScreen = () => {
       aspect: [4, 3],
       quality: 1,
     });
-
-    console.log(result);
 
     if (!result.canceled) {
       setSelectedImage(result.assets[0].uri);

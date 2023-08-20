@@ -185,7 +185,7 @@ export const HomeScreen = () => {
                 shadowRadius: 3.84,
                 elevation: 5,
               }}>
-              <Ionicons name={x.name} size={35} color={theme.FACEBOOK} />
+              <Ionicons name={x.name} size={35} color={theme.GOLD} />
             </TouchableOpacity>
           );
         })}
@@ -234,7 +234,7 @@ export const HomeScreen = () => {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Ionicons name={'search'} size={26} color={theme.FACEBOOK} />
+          <Ionicons name={'search'} size={26} color={theme.GOLD} />
         </TouchableOpacity>
       </View>
 

@@ -24,14 +24,18 @@ export const ListScreen = () => {
   const { colors } = useTheme();
 
   useEffect(() => {
-    console.log(user);
-    setIsLoading(true);
-    fetchUserPoints(user.uid);
-  });
+    if (!userPoints) {
+      setIsLoading(true);
+      fetchUserPoints(user.uid);
+    }
+  }, []);
 
   const fetchUserPoints = async (uid: string) => {
     try {
-      const querySnapshot = await firestore().collection('points').get();
+      const querySnapshot = await firestore()
+        .collection('points')
+        .where('uid', '==', uid)
+        .get();
 
       const data: any[] = [];
       querySnapshot.forEach((doc) => {
@@ -47,6 +51,7 @@ export const ListScreen = () => {
       // You can perform any additional actions with the fetched data
     } catch (error) {
       console.log(error);
+      setUserPoints([]);
 
       //   showToast({
       //     type: 'error',
@@ -103,7 +108,9 @@ export const ListScreen = () => {
           }}>
           My Points
         </Text>
-        <Ionicons name={'filter'} size={30} color={theme.FACEBOOK} />
+        <TouchableOpacity>
+          <Ionicons name={'filter'} size={25} color={theme.GOLD} />
+        </TouchableOpacity>
       </View>
       <TouchableOpacity
         onPress={() => setModalVisible(true)}
@@ -124,7 +131,7 @@ export const ListScreen = () => {
           shadowRadius: 3.84,
           elevation: 5,
         }}>
-        <Ionicons name={'add-outline'} size={50} color={theme.FACEBOOK} />
+        <Ionicons name={'add-outline'} size={50} color={theme.GOLD} />
       </TouchableOpacity>
       <EditModal visible={modalVisible} setVisible={setModalVisible} />
     </View>
