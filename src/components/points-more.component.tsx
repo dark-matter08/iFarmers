@@ -77,6 +77,7 @@ export const PointsMore = (props: any) => {
                     style={{
                       fontSize: 20,
                       fontWeight: '600',
+                      color: colors.text,
                     }}>
                     {location?.name}
                   </Text>
@@ -86,6 +87,7 @@ export const PointsMore = (props: any) => {
                       fontSize: 15,
                       fontWeight: '400',
                       marginTop: 10,
+                      color: colors.text,
                     }}>
                     {location?.placeName}
                   </Text>
@@ -95,6 +97,7 @@ export const PointsMore = (props: any) => {
                       fontSize: 15,
                       fontWeight: '400',
                       marginTop: 10,
+                      color: colors.text,
                     }}>
                     {location?.city}
                   </Text>
@@ -146,6 +149,7 @@ export const PointsMore = (props: any) => {
                     fontWeight: '600',
                     marginBottom: 10,
                     textDecorationLine: 'underline',
+                    color: colors.text,
                   }}>
                   Description
                 </Text>
@@ -153,9 +157,95 @@ export const PointsMore = (props: any) => {
                   style={{
                     fontSize: 16,
                     fontWeight: '400',
+                    color: colors.text,
                   }}>
                   {location?.description}
                 </Text>
+              </View>
+            </View>
+            <Text
+              style={{
+                fontSize: 21,
+                fontWeight: '600',
+                marginTop: 10,
+                textDecorationLine: 'underline',
+                color: colors.text,
+              }}>
+              Contact Info
+            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <View
+                style={{
+                  height: 80,
+                  width: 80,
+                  borderRadius: 100,
+                  borderWidth: 3,
+                  borderColor: theme.VIOLET,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginTop: 20,
+                  marginBottom: 10,
+                }}>
+                {location?.user?.photoURL ? (
+                  <Image
+                    source={{ uri: location?.user?.photoURL }}
+                    style={{
+                      height: '100%',
+                      width: '100%',
+                      borderRadius: 100,
+                    }}
+                  />
+                ) : (
+                  <Ionicons name={'md-image'} size={70} color={theme.VIOLET} />
+                )}
+              </View>
+              <View style={{ flex: 1, marginLeft: 20 }}>
+                <Text
+                  style={{
+                    fontSize: 20,
+                    fontWeight: '600',
+                    color: colors.text,
+                  }}>
+                  {location?.user?.displayName}
+                </Text>
+
+                <Text
+                  style={{
+                    fontSize: 15,
+                    fontWeight: '400',
+                    marginTop: 10,
+                    color: colors.text,
+                  }}>
+                  {location?.user?.phoneNumber}
+                </Text>
+              </View>
+              <View
+                style={{
+                  width: 60,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <TouchableOpacity
+                  style={{
+                    height: 45,
+                    width: 45,
+                    borderRadius: 30,
+                    borderWidth: 2,
+                    borderColor: theme.VIOLET,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Ionicons
+                    name={'call-outline'}
+                    size={30}
+                    color={theme.VIOLET}
+                  />
+                </TouchableOpacity>
               </View>
             </View>
           </ScrollView>

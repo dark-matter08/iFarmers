@@ -21,16 +21,6 @@ import { FontAwesome } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { PointsMore } from '../../../components/points-more.component';
 
-function getRandomInRange(min: number, max: number, decimalPlaces: number) {
-  const random = Math.random() * (max - min) + min;
-  return Number(random.toFixed(decimalPlaces));
-}
-
-const dummyLocations = Array.from({ length: 8 }, () => ({
-  latitude: getRandomInRange(4.61, 4.65, 6),
-  longitude: getRandomInRange(9.4, 9.55, 6),
-}));
-
 interface Icon {
   name: 'ios-location' | 'add';
   fxn: (() => void) | (() => null);
@@ -49,9 +39,12 @@ export const HomeScreen = () => {
   const [showMore, setShowMore] = useState(false);
 
   useEffect(() => {
+    console.log('loading points');
+
     if (!allPoints) {
-      setIsLoading(true);
-      fetchUserPoints();
+      // setIsLoading(true);
+      // fetchUserPoints();
+      // getCurrentLocation();
     }
   }, []);
 
@@ -127,10 +120,6 @@ export const HomeScreen = () => {
     }
     setIsLoading(false);
   };
-
-  useEffect(() => {
-    getCurrentLocation();
-  }, []);
 
   const handleCenterOnLocation = () => {
     if (currentLocation) {

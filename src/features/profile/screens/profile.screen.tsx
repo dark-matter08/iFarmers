@@ -31,6 +31,7 @@ export const ProfileScreen = () => {
           flex: 1,
           justifyContent: 'center',
           alignItems: 'center',
+          backgroundColor: colors.background,
         }}>
         <ActivityIndicator size={'large'} color={theme.GREEN_MED} />
       </View>
@@ -81,6 +82,7 @@ export const ProfileScreen = () => {
           flexDirection: 'row',
           justifyContent: 'space-between',
           paddingHorizontal: 23,
+          backgroundColor: colors.background,
         }}>
         <View
           style={{

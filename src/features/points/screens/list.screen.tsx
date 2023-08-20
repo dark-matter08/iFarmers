@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ScrollView,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import { showToast } from '../../../utils/showToast';
@@ -75,6 +76,7 @@ export const ListScreen = () => {
           flex: 1,
           justifyContent: 'center',
           alignItems: 'center',
+          backgroundColor: colors.background,
         }}>
         <ActivityIndicator size={'large'} color={theme.GREEN_MED} />
       </View>
@@ -120,10 +122,10 @@ export const ListScreen = () => {
         </TouchableOpacity>
       </View>
 
-      <View
+      <ScrollView
         style={{
           paddingHorizontal: 23,
-          alignItems: 'center',
+          // alignItems: 'center',
           marginTop: 10,
           flex: 1,
         }}>
@@ -153,7 +155,7 @@ export const ListScreen = () => {
             })}
           </>
         )}
-      </View>
+      </ScrollView>
 
       <TouchableOpacity
         onPress={() => setModalVisible(true)}

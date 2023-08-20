@@ -102,6 +102,7 @@ export const EditModal = ({ visible, setVisible }: EditModalProps) => {
             latitude,
             placeName,
             city,
+            user,
             uid: user.uid,
             url: url,
           };

@@ -176,10 +176,11 @@ export const PlaceSelector: React.FC<PlaceSelectorProps> = (props) => {
                 backgroundColor: colors.background,
               },
               listView: {
-                backgroundColor: colors.background,
+                // backgroundColor: colors.background,
                 marginTop: 5,
                 paddingTop: 5,
                 borderTopWidth: 0.5,
+                color: colors.text,
               },
               row: {
                 backgroundColor: colors.background,
