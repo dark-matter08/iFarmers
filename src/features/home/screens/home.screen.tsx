@@ -19,6 +19,7 @@ import firestore from '@react-native-firebase/firestore';
 import { showToast } from '../../../utils/showToast';
 import { FontAwesome } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
+import { PointsMore } from '../../../components/points-more.component';
 
 function getRandomInRange(min: number, max: number, decimalPlaces: number) {
   const random = Math.random() * (max - min) + min;
@@ -44,6 +45,8 @@ export const HomeScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const mapRef = useRef<MapView>(null);
   const [allPoints, setAllPoints] = useState<any[]>();
+  const [active, setActive] = useState<any>();
+  const [showMore, setShowMore] = useState(false);
 
   useEffect(() => {
     if (!allPoints) {
@@ -59,7 +62,9 @@ export const HomeScreen = () => {
       const data: any[] = [];
       querySnapshot.forEach((doc) => {
         // Retrieve the data from each document
+        const documentId = doc.id;
         const docData = doc.data();
+        docData.id = documentId;
         data.push(docData);
       });
 
@@ -67,6 +72,7 @@ export const HomeScreen = () => {
 
       setIsLoading(false);
       // You can perform any additional actions with the fetched data
+      console.log(data);
     } catch (error) {
       console.log(error);
       setAllPoints([]);
@@ -164,15 +170,15 @@ export const HomeScreen = () => {
           ref={mapRef}
           style={styles.map}
           initialRegion={{
-            latitude: currentLocation.latitude,
-            longitude: currentLocation.longitude,
+            latitude: currentLocation?.latitude,
+            longitude: currentLocation?.longitude,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}>
           <Marker
             coordinate={{
-              latitude: currentLocation.latitude,
-              longitude: currentLocation.longitude,
+              latitude: currentLocation?.latitude,
+              longitude: currentLocation?.longitude,
             }}
             pinColor={theme.FLAME}
             title="My Location"
@@ -181,6 +187,10 @@ export const HomeScreen = () => {
           {allPoints.map((location, index) => {
             return (
               <Marker
+                onPress={() => {
+                  setActive(location);
+                  setShowMore(true);
+                }}
                 key={index}
                 coordinate={{
                   latitude: location.latitude,
@@ -316,6 +326,11 @@ export const HomeScreen = () => {
           <ActivityIndicator size={'large'} />
         </View>
       )}
+      <PointsMore
+        location={active}
+        visible={showMore}
+        setVisible={setShowMore}
+      />
     </View>
   );
 };

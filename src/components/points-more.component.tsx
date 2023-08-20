@@ -9,10 +9,20 @@ import {
 } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useDispatch, useSelector } from 'react-redux';
+import theme from '../infrastructure/theme';
+import { addToFav, removeFav } from '../redux/actions/fav.action';
 
 export const PointsMore = (props: any) => {
   const { colors } = useTheme();
   const { location, visible, setVisible } = props;
+  const dispatch = useDispatch();
+  const [isFav, setIsFav] = useState(false);
+  const favs = useSelector((state: any) => state.fav);
+
+  useEffect(() => {
+    setIsFav(favs.filter((x: any) => x?.id === location?.id).length > 0);
+  }, [favs]);
 
   return (
     <>
@@ -55,7 +65,7 @@ export const PointsMore = (props: any) => {
                   flexDirection: 'row',
                 }}>
                 <Image
-                  source={{ uri: location.url }}
+                  source={{ uri: location?.url }}
                   style={{
                     height: 90,
                     width: 90,
@@ -68,7 +78,16 @@ export const PointsMore = (props: any) => {
                       fontSize: 20,
                       fontWeight: '600',
                     }}>
-                    {location.name}
+                    {location?.name}
+                  </Text>
+
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      fontWeight: '400',
+                      marginTop: 10,
+                    }}>
+                    {location?.placeName}
                   </Text>
 
                   <Text
@@ -87,12 +106,33 @@ export const PointsMore = (props: any) => {
                     alignItems: 'center',
                   }}>
                   <TouchableOpacity
+                    onPress={() => {
+                      console.log(location.id);
+
+                      console.log(
+                        isFav ? 'removing from fav' : 'adding to fav'
+                      );
+
+                      if (isFav) {
+                        dispatch(removeFav(location));
+                      } else {
+                        dispatch(addToFav(location));
+                      }
+                    }}
                     style={{
                       height: 60,
                       width: 60,
                       borderRadius: 30,
+                      borderWidth: 2,
+                      borderColor: isFav ? theme.FLAME : theme.VIOLET,
+                      justifyContent: 'center',
+                      alignItems: 'center',
                     }}>
-                    <Ionicons name="heart-outline" size={30} color="black" />
+                    <Ionicons
+                      name={isFav ? 'heart' : 'heart-outline'}
+                      size={35}
+                      color={isFav ? theme.FLAME : theme.VIOLET}
+                    />
                   </TouchableOpacity>
                 </View>
               </View>
@@ -115,7 +155,7 @@ export const PointsMore = (props: any) => {
                     fontSize: 16,
                     fontWeight: '400',
                   }}>
-                  {location.description}
+                  {location?.description}
                 </Text>
               </View>
             </View>

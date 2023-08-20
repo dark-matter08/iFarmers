@@ -3,6 +3,7 @@ import {
   ActivityIndicator,
   Platform,
   SafeAreaView,
+  ScrollView,
   Text,
   TouchableOpacity,
   View,
@@ -14,11 +15,17 @@ import theme from '../../../infrastructure/theme';
 import { useTheme } from '@react-navigation/native';
 // import { db } from '../../../../firebaseConfig';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { Point } from '../../points/components/point.component';
+import { PointsMore } from '../../../components/points-more.component';
 
 export const FavoriteScreen = () => {
   const { user } = useSelector((state: any) => state.auth);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { colors } = useTheme();
+  const favs = useSelector((state: any) => state.fav);
+
+  const [active, setActive] = useState<any>();
+  const [showMore, setShowMore] = useState(false);
 
   if (isLoading) {
     return (
@@ -70,6 +77,45 @@ export const FavoriteScreen = () => {
           <Ionicons name={'filter'} size={25} color={theme.GOLD} />
         </TouchableOpacity>
       </View>
+
+      <View
+        style={{
+          paddingHorizontal: 23,
+          alignItems: 'center',
+          marginTop: 10,
+          flex: 1,
+        }}>
+        {favs?.length === 0 ? (
+          <View
+            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Text
+              style={{
+                fontSize: 25,
+                fontWeight: '600',
+              }}>
+              You have added no favorites locations
+            </Text>
+          </View>
+        ) : (
+          <ScrollView style={{ flex: 1, width: '100%' }}>
+            {favs?.map((x: any, index: number) => {
+              return (
+                <Point
+                  location={x}
+                  key={index}
+                  setActive={setActive}
+                  setShowMore={setShowMore}
+                />
+              );
+            })}
+          </ScrollView>
+        )}
+      </View>
+      <PointsMore
+        location={active}
+        visible={showMore}
+        setVisible={setShowMore}
+      />
     </View>
   );
 };

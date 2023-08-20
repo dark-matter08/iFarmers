@@ -44,7 +44,9 @@ export const ListScreen = () => {
       const data: any[] = [];
       querySnapshot.forEach((doc) => {
         // Retrieve the data from each document
+        const documentId = doc.id;
         const docData = doc.data();
+        docData.id = documentId;
         data.push(docData);
       });
 
@@ -120,13 +122,20 @@ export const ListScreen = () => {
       <View
         style={{
           paddingHorizontal: 23,
-          justifyContent: 'center',
           alignItems: 'center',
           marginTop: 10,
+          flex: 1,
         }}>
         {userPoints?.length === 0 ? (
-          <View>
-            <Text>You have added no locations</Text>
+          <View
+            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Text
+              style={{
+                fontSize: 25,
+                fontWeight: '600',
+              }}>
+              You have added no favorites locations
+            </Text>
           </View>
         ) : (
           <>
