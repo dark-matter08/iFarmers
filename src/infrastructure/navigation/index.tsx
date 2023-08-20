@@ -48,8 +48,6 @@ const Navigation = () => {
 
   const isDarkMode = default_color_mode === 'dark';
 
-  console.log(user);
-
   return (
     <NavigationContainer theme={isDarkMode ? MyDarkTheme : LightTheme}>
       {!isAuthenticated ? <AuthNavigator /> : <AppNavigator />}

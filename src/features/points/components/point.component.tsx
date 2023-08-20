@@ -40,14 +40,16 @@ export const Point = (props: any) => {
           style={{
             fontSize: 20,
             fontWeight: '600',
+            color: colors.text,
           }}>
           {location.name}
         </Text>
         <Text
-          numberOfLines={3}
+          numberOfLines={2}
           style={{
             fontSize: 16,
             fontWeight: '400',
+            color: colors.text,
           }}>
           {location.description}
         </Text>
@@ -56,6 +58,7 @@ export const Point = (props: any) => {
             fontSize: 15,
             fontWeight: '400',
             marginTop: 10,
+            color: colors.text,
           }}>
           {location?.city}
         </Text>
@@ -63,11 +66,11 @@ export const Point = (props: any) => {
       <View
         style={{ width: 60, justifyContent: 'center', alignItems: 'center' }}>
         {location.type === 'urban farms' ? (
-          <FontAwesome name="road" size={24} color="black" />
+          <FontAwesome name="road" size={24} color={colors.text} />
         ) : location.type === 'restaurants' ? (
-          <Ionicons name="restaurant" size={24} color="black" />
+          <Ionicons name="restaurant" size={24} color={colors.text} />
         ) : (
-          <Entypo name="shop" size={24} color="black" />
+          <Entypo name="shop" size={24} color={colors.text} />
         )}
       </View>
     </TouchableOpacity>

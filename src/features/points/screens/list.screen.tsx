@@ -29,12 +29,12 @@ export const ListScreen = () => {
 
   useEffect(() => {
     if (!userPoints) {
-      setIsLoading(true);
       fetchUserPoints(user.uid);
     }
   }, []);
 
   const fetchUserPoints = async (uid: string) => {
+    setIsLoading(true);
     try {
       const querySnapshot = await firestore()
         .collection('points')
@@ -85,6 +85,7 @@ export const ListScreen = () => {
     <View
       style={{
         flex: 1,
+        backgroundColor: colors.background,
       }}>
       <View
         style={{
@@ -114,8 +115,8 @@ export const ListScreen = () => {
           }}>
           My Points
         </Text>
-        <TouchableOpacity>
-          <Ionicons name={'filter'} size={25} color={theme.GOLD} />
+        <TouchableOpacity onPress={() => fetchUserPoints(user.uid)}>
+          <Ionicons name={'refresh'} size={30} color={theme.GOLD} />
         </TouchableOpacity>
       </View>
 
@@ -133,6 +134,7 @@ export const ListScreen = () => {
               style={{
                 fontSize: 25,
                 fontWeight: '600',
+                color: colors.text,
               }}>
               You have added no favorites locations
             </Text>

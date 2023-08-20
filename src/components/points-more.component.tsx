@@ -150,7 +150,6 @@ export const PointsMore = (props: any) => {
                   Description
                 </Text>
                 <Text
-                  numberOfLines={3}
                   style={{
                     fontSize: 16,
                     fontWeight: '400',

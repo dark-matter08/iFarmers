@@ -41,6 +41,7 @@ export const ProfileScreen = () => {
     <View
       style={{
         flex: 1,
+        backgroundColor: colors.background,
       }}>
       <View
         style={{
@@ -111,6 +112,8 @@ export const ProfileScreen = () => {
             style={{
               fontSize: 25,
               fontWeight: '800',
+              color: colors.text,
+              marginTop: 3,
             }}>
             {user.displayName}
           </Text>
@@ -118,6 +121,8 @@ export const ProfileScreen = () => {
             style={{
               fontSize: 20,
               fontWeight: '600',
+              color: colors.text,
+              marginTop: 3,
             }}>
             {user.email}
           </Text>
@@ -125,6 +130,8 @@ export const ProfileScreen = () => {
             style={{
               fontSize: 18,
               fontWeight: '600',
+              color: colors.text,
+              marginTop: 3,
             }}>
             {user.phoneNumber}
           </Text>
@@ -145,7 +152,7 @@ export const ProfileScreen = () => {
             <Text
               style={{
                 fontWeight: '800',
-                fontSize: 18,
+                fontSize: 15,
                 color: theme.VIOLET,
               }}>
               Account Type: Farmer

@@ -44,6 +44,7 @@ export const FavoriteScreen = () => {
     <View
       style={{
         flex: 1,
+        backgroundColor: colors.background,
       }}>
       <View
         style={{
@@ -92,6 +93,7 @@ export const FavoriteScreen = () => {
               style={{
                 fontSize: 25,
                 fontWeight: '600',
+                color: colors.text,
               }}>
               You have added no favorites locations
             </Text>

@@ -94,9 +94,6 @@ export const DetailsScreen = () => {
         dispatch(setCurrentUser(user));
         setisLoading(false);
       });
-    } else {
-      dispatch(setCurrentUser(user));
-      setisLoading(false);
     }
   };
 

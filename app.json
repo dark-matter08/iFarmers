@@ -4,7 +4,7 @@
     "slug": "iFarmers",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/logo.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "plugins": [
       "@react-native-firebase/app",
@@ -25,11 +25,13 @@
       ]
     ],
     "splash": {
-      "image": "./assets/logo.png",
+      "image": "./assets/icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.ifarmers",
@@ -41,17 +43,28 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff",
         "config": {
           "googleMapsApiKey": "AIzaSyB1-zWe-Xc_GKGtkqSa48POSP0TxJaRK30"
         }
       },
       "package": "com.ifarmers",
-      "googleServicesFile": "./google-config/google-services.json"
+      "googleServicesFile": "./google-config/google-services.json",
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.FOREGROUND_SERVICE"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f262e915-7347-4c39-aad1-62d8f7c4e6fa"
+      }
     }
   }
 }
