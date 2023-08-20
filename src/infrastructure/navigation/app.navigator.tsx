@@ -6,6 +6,8 @@ import { HomeScreen } from '../../features/home/screens/home.screen';
 import { ParamListBase, RouteProp, useTheme } from '@react-navigation/native';
 import { useColorScheme } from 'react-native';
 import { ListScreen } from '../../features/points/screens/list.screen';
+import { FavoriteScreen } from '../../features/favorites/screens/favorites.screen';
+import { ProfileScreen } from '../../features/profile/screens/profile.screen';
 const Tab = AnimatedTabBarNavigator();
 
 export interface TabIconParams {
@@ -61,8 +63,8 @@ export const AppNavigator = () => {
       appearance={{ floating: false }}>
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="My Points" component={ListScreen} />
-      <Tab.Screen name="Favourites" component={HomeScreen} />
-      <Tab.Screen name="Profile" component={HomeScreen} />
+      <Tab.Screen name="Favourites" component={FavoriteScreen} />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );
 };

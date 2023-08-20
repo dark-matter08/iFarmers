@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -18,7 +18,7 @@ import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import { showToast } from '../../../utils/showToast';
 import { useSelector } from 'react-redux';
-import { convertImageToArrayBuffer } from '../../../utils/convertImageToArrayBuffer';
+import { PlaceSelector } from './place-selector.component';
 
 interface EditModalProps {
   visible: boolean;
@@ -28,15 +28,30 @@ interface EditModalProps {
 export const EditModal = ({ visible, setVisible }: EditModalProps) => {
   const { colors } = useTheme();
   const [name, setName] = useState('');
-  const [type, setType] = useState('');
+  const [type, setType] = useState('urban farms');
   const [description, setDescription] = useState('');
   const [longitude, setLongitude] = useState('');
   const [latitude, setLatitude] = useState('');
+  const [placeName, setPlaceName] = useState('');
   const [selectedImage, setSelectedImage] = useState('');
+  const [city, setCity] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useSelector((state: any) => state.auth);
+  const [placeVisible, setPlaceVisible] = useState(false);
+  const [selected, setSelected] = useState<any>();
 
   const pickerRef = useRef<Picker<string>>(null);
+
+  useEffect(() => {
+    console.log(selected);
+
+    if (selected) {
+      setLatitude(selected?.coordinate?.latitude);
+      setLongitude(selected?.coordinate?.longitude);
+      setPlaceName(selected?.address.name);
+      setCity(selected?.address?.city);
+    }
+  }, [selected]);
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -85,12 +100,21 @@ export const EditModal = ({ visible, setVisible }: EditModalProps) => {
             description,
             longitude,
             latitude,
+            placeName,
+            city,
             uid: user.uid,
             url: url,
           };
           const res = await firestore().collection('points').add(data);
-          console.log(res);
+
           setTimeout(() => {
+            setType('urban farms');
+            setName('');
+            setDescription('');
+            setLongitude('');
+            setLatitude('');
+            setPlaceName('');
+            setSelectedImage('');
             showToast({
               type: 'success',
               title: 'Point Added',
@@ -116,239 +140,235 @@ export const EditModal = ({ visible, setVisible }: EditModalProps) => {
   };
 
   return (
-    <Modal
-      animationType="slide"
-      transparent={true}
-      visible={visible}
-      onRequestClose={() => setVisible(false)}>
-      <View
-        style={{
-          height: '80%',
-          top: '20%',
-          position: 'absolute',
-          width: '100%',
-          backgroundColor: colors.background,
-          borderTopRightRadius: 30,
-          borderTopLeftRadius: 30,
-          paddingHorizontal: 23,
-        }}>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <TouchableOpacity
-            onPress={pickImage}
-            style={{
-              height: 140,
-              width: 140,
-              borderRadius: 100,
-              borderWidth: 5,
-              borderColor: theme.VIOLET,
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: 20,
-              marginBottom: 10,
-              alignSelf: 'center',
-            }}>
-            {selectedImage ? (
-              <Image
-                source={{ uri: selectedImage }}
+    <>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={visible}
+        onRequestClose={() => setVisible(false)}>
+        <View
+          style={{
+            height: '90%',
+            top: '10%',
+            position: 'absolute',
+            width: '100%',
+            backgroundColor: colors.background,
+            borderTopRightRadius: 30,
+            borderTopLeftRadius: 30,
+            paddingHorizontal: 23,
+          }}>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <TouchableOpacity
+              onPress={pickImage}
+              style={{
+                height: 140,
+                width: 140,
+                borderRadius: 100,
+                borderWidth: 5,
+                borderColor: theme.VIOLET,
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: 20,
+                marginBottom: 10,
+                alignSelf: 'center',
+              }}>
+              {selectedImage ? (
+                <Image
+                  source={{ uri: selectedImage }}
+                  style={{
+                    height: '100%',
+                    width: '100%',
+                    borderRadius: 90,
+                  }}
+                />
+              ) : (
+                <Ionicons name={'md-image'} size={120} color={theme.VIOLET} />
+              )}
+            </TouchableOpacity>
+            <Text
+              style={{
+                color: colors.text,
+                textAlign: 'left',
+                fontWeight: '500',
+                fontSize: 20,
+              }}>
+              Name:
+            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                height: 55,
+                width: '100%',
+                backgroundColor: theme.GREY_5,
+                borderRadius: 10,
+                paddingHorizontal: 20,
+                marginVertical: 10,
+                alignSelf: 'center',
+              }}>
+              <TextInput
+                value={name}
+                onChangeText={setName}
+                placeholder="Enter point name"
+                placeholderTextColor={theme.DARK}
                 style={{
+                  flex: 1,
                   height: '100%',
-                  width: '100%',
-                  borderRadius: 90,
+                  fontSize: theme.FONT_SIZE_NORMAL + 2,
+                  paddingVertical: 0,
+                  paddingHorizontal: 8,
+                  color: theme.DARK,
                 }}
               />
-            ) : (
-              <Ionicons name={'md-image'} size={120} color={theme.VIOLET} />
-            )}
-          </TouchableOpacity>
-          <Text
-            style={{
-              color: colors.text,
-              textAlign: 'left',
-              fontWeight: '500',
-              fontSize: 20,
-            }}>
-            Name:
-          </Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              height: 55,
-              width: '100%',
-              backgroundColor: theme.GREY_5,
-              borderRadius: 10,
-              paddingHorizontal: 20,
-              marginVertical: 10,
-              alignSelf: 'center',
-            }}>
-            <TextInput
-              value={name}
-              onChangeText={setName}
-              placeholder="Enter point name"
-              placeholderTextColor={theme.DARK}
+            </View>
+
+            <Text
               style={{
-                flex: 1,
-                height: '100%',
-                fontSize: theme.FONT_SIZE_NORMAL + 2,
-                paddingVertical: 0,
-                paddingHorizontal: 8,
-                color: theme.DARK,
-              }}
-            />
-          </View>
+                color: colors.text,
+                textAlign: 'left',
+                fontWeight: '500',
+                fontSize: 20,
+              }}>
+              Type:
+            </Text>
 
-          <Text
-            style={{
-              color: colors.text,
-              textAlign: 'left',
-              fontWeight: '500',
-              fontSize: 20,
-            }}>
-            Type:
-          </Text>
-
-          <Picker<string>
-            style={{
-              flexDirection: 'row',
-              height: 55,
-              width: '100%',
-              backgroundColor: theme.GREY_5,
-              borderRadius: 10,
-              paddingHorizontal: 20,
-              marginVertical: 10,
-              alignSelf: 'center',
-            }}
-            ref={pickerRef}
-            selectedValue={type}
-            onValueChange={(itemValue: any) => setType(itemValue)}>
-            <Picker.Item label="Urban Farms" value="urban farms" />
-            <Picker.Item label="Food Markets" value="food markets" />
-            <Picker.Item label="Restaurants" value="restaurants" />
-          </Picker>
-
-          <Text
-            style={{
-              color: colors.text,
-              textAlign: 'left',
-              fontWeight: '500',
-              fontSize: 20,
-            }}>
-            Longitude:
-          </Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              height: 55,
-              width: '100%',
-              backgroundColor: theme.GREY_5,
-              borderRadius: 10,
-              paddingHorizontal: 20,
-              marginVertical: 10,
-              alignSelf: 'center',
-            }}>
-            <TextInput
-              value={longitude}
-              onChangeText={setLongitude}
-              placeholder="Enter point latitude"
-              placeholderTextColor={theme.DARK}
+            <Picker<string>
               style={{
-                flex: 1,
-                height: '100%',
-                fontSize: theme.FONT_SIZE_NORMAL + 2,
-                paddingVertical: 0,
-                paddingHorizontal: 8,
-                color: theme.DARK,
+                flexDirection: 'row',
+                height: 55,
+                width: '100%',
+                backgroundColor: theme.GREY_5,
+                borderRadius: 10,
+                paddingHorizontal: 20,
+                marginVertical: 10,
+                alignSelf: 'center',
               }}
-              keyboardType="number-pad"
-            />
-          </View>
+              ref={pickerRef}
+              selectedValue={type}
+              onValueChange={(itemValue: any) => setType(itemValue)}>
+              <Picker.Item label="Urban Farms" value="urban farms" />
+              <Picker.Item label="Food Markets" value="food markets" />
+              <Picker.Item label="Restaurants" value="restaurants" />
+            </Picker>
 
-          <Text
-            style={{
-              color: colors.text,
-              textAlign: 'left',
-              fontWeight: '500',
-              fontSize: 20,
-            }}>
-            Latitude:
-          </Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              height: 55,
-              width: '100%',
-              backgroundColor: theme.GREY_5,
-              borderRadius: 10,
-              paddingHorizontal: 20,
-              marginVertical: 10,
-              alignSelf: 'center',
-            }}>
-            <TextInput
-              value={latitude}
-              onChangeText={setLatitude}
-              placeholder="Enter point longitude"
-              placeholderTextColor={theme.DARK}
+            <View
               style={{
-                flex: 1,
-                height: '100%',
-                fontSize: theme.FONT_SIZE_NORMAL + 2,
-                paddingVertical: 0,
-                paddingHorizontal: 8,
-                color: theme.DARK,
-              }}
-              keyboardType="number-pad"
-            />
-          </View>
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                paddingVertical: 10,
+              }}>
+              <TouchableOpacity
+                onPress={() => setPlaceVisible(true)}
+                style={{
+                  width: 60,
+                  height: 60,
+                  borderRadius: 30,
+                  backgroundColor: theme.GREY_5,
+                  marginRight: 10,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Ionicons name={'location'} size={30} color={theme.VIOLET} />
+              </TouchableOpacity>
+              <View style={{ flex: 1 }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    height: 45,
+                    width: '100%',
+                    backgroundColor: theme.GREY_5,
+                    borderRadius: 10,
+                    paddingHorizontal: 20,
+                    marginVertical: 10,
+                    alignSelf: 'center',
+                  }}>
+                  <TextInput
+                    value={placeName}
+                    onChangeText={setPlaceName}
+                    placeholder="Edit place name"
+                    placeholderTextColor={theme.DARK}
+                    style={{
+                      flex: 1,
+                      height: '100%',
+                      fontSize: theme.FONT_SIZE_NORMAL + 2,
+                      paddingVertical: 0,
+                      paddingHorizontal: 8,
+                      color: theme.DARK,
+                    }}
+                  />
+                </View>
+                <Text
+                  style={{
+                    color: theme.VIOLET,
+                    textAlign: 'right',
+                    fontWeight: '600',
+                  }}>
+                  Coordinates:{' '}
+                  {latitude
+                    ? `${latitude}, ${longitude}`
+                    : 'Select Coordinates'}
+                </Text>
+              </View>
+            </View>
 
-          <Text
-            style={{
-              color: colors.text,
-              textAlign: 'left',
-              fontWeight: '500',
-              fontSize: 20,
-            }}>
-            Description:
-          </Text>
-          <TextInput
-            value={description}
-            onChangeText={setDescription}
-            multiline
-            style={{
-              height: 130,
-              width: '100%',
-              backgroundColor: theme.GREY_5,
-              borderRadius: 10,
-              paddingHorizontal: 20,
-              marginVertical: 10,
-              alignSelf: 'center',
-            }}
-          />
-
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              paddingHorizontal: 22,
-              marginTop: 20,
-            }}>
-            <Button
-              width={55}
-              title="X"
-              onPress={() => {
-                setIsLoading(false);
-                setVisible(false);
+            <Text
+              style={{
+                color: colors.text,
+                textAlign: 'left',
+                fontWeight: '500',
+                fontSize: 20,
+              }}>
+              Description:
+            </Text>
+            <TextInput
+              value={description}
+              onChangeText={setDescription}
+              multiline
+              style={{
+                height: 80,
+                width: '100%',
+                backgroundColor: theme.GREY_5,
+                borderRadius: 10,
+                paddingHorizontal: 20,
+                marginVertical: 10,
+                alignSelf: 'center',
+                fontSize: 17,
               }}
             />
-            <Button
-              width={'80%'}
-              title="Save"
-              onPress={handleSave}
-              isLoading={isLoading}
-            />
-          </View>
-          <View style={{ height: 40 }} />
-        </ScrollView>
-      </View>
-    </Modal>
+
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                paddingHorizontal: 0,
+                marginTop: 20,
+              }}>
+              <Button
+                width={55}
+                title="X"
+                onPress={() => {
+                  setIsLoading(false);
+                  setVisible(false);
+                }}
+              />
+              <Button
+                width={'76%'}
+                title="Save"
+                onPress={handleSave}
+                isLoading={isLoading}
+              />
+            </View>
+            <View style={{ height: 40 }} />
+          </ScrollView>
+        </View>
+      </Modal>
+      <PlaceSelector
+        visible={placeVisible}
+        setVisible={setPlaceVisible}
+        selected={selected}
+        setSelected={setSelected}
+      />
+    </>
   );
 };

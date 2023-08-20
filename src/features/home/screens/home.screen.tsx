@@ -2,6 +2,7 @@ import { useTheme } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
+  Image,
   Platform,
   StyleSheet,
   Text,
@@ -9,12 +10,15 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { Marker, PROVIDER_GOOGLE, Callout } from 'react-native-maps';
 import * as Location from 'expo-location';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import theme from '../../../infrastructure/theme';
 import axios from 'axios';
+import firestore from '@react-native-firebase/firestore';
 import { showToast } from '../../../utils/showToast';
+import { FontAwesome } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
 
 function getRandomInRange(min: number, max: number, decimalPlaces: number) {
   const random = Math.random() * (max - min) + min;
@@ -39,6 +43,42 @@ export const HomeScreen = () => {
   const [searchQ, setSearchQ] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const mapRef = useRef<MapView>(null);
+  const [allPoints, setAllPoints] = useState<any[]>();
+
+  useEffect(() => {
+    if (!allPoints) {
+      setIsLoading(true);
+      fetchUserPoints();
+    }
+  }, []);
+
+  const fetchUserPoints = async () => {
+    try {
+      const querySnapshot = await firestore().collection('points').get();
+
+      const data: any[] = [];
+      querySnapshot.forEach((doc) => {
+        // Retrieve the data from each document
+        const docData = doc.data();
+        data.push(docData);
+      });
+
+      setAllPoints(data);
+
+      setIsLoading(false);
+      // You can perform any additional actions with the fetched data
+    } catch (error) {
+      console.log(error);
+      setAllPoints([]);
+
+      //   showToast({
+      //     type: 'error',
+      //     title: 'Error fetching data',
+      //     message: 'Encountered an error tryiing to fetch your points',
+      //   });
+      setIsLoading(false);
+    }
+  };
 
   const getCurrentLocation = async () => {
     try {
@@ -118,7 +158,7 @@ export const HomeScreen = () => {
         alignItems: 'center',
         backgroundColor: colors.background,
       }}>
-      {currentLocation ? (
+      {allPoints ? (
         <MapView
           provider={PROVIDER_GOOGLE}
           ref={mapRef}
@@ -134,20 +174,44 @@ export const HomeScreen = () => {
               latitude: currentLocation.latitude,
               longitude: currentLocation.longitude,
             }}
-            pinColor={'blue'}
+            pinColor={theme.FLAME}
             title="My Location"
           />
 
-          {dummyLocations.map((location, index) => {
+          {allPoints.map((location, index) => {
             return (
               <Marker
                 key={index}
-                coordinate={location}
-                pinColor={'red'}
-                title={`Location ${index + 1}`}
-                description={`Dummy Location ${index + 1}`}
-                // image={{ uri: 'custom_pin' }}
-              />
+                coordinate={{
+                  latitude: location.latitude,
+                  longitude: location.longitude,
+                }}
+                pinColor={
+                  location.type === 'urban farms'
+                    ? theme.VIOLET
+                    : location.type === 'restaurants'
+                    ? theme.GREEN_MED
+                    : theme.GOLD
+                }>
+                <Callout>
+                  <View style={styles.calloutContainer}>
+                    <Image
+                      source={{ uri: location.url }}
+                      style={styles.calloutImage}
+                    />
+                    <View>
+                      <Text
+                        style={
+                          styles.calloutText
+                        }>{`${location.name}, ${location.placeName}`}</Text>
+                      <Text
+                        style={
+                          styles.calloutDescription
+                        }>{`${location.description}`}</Text>
+                    </View>
+                  </View>
+                </Callout>
+              </Marker>
             );
           })}
         </MapView>
@@ -161,7 +225,7 @@ export const HomeScreen = () => {
           width: 60,
           minHeight: 150,
           right: 20,
-          bottom: 20,
+          bottom: 70,
           borderRadius: 40,
           justifyContent: 'space-around',
           alignItems: 'center',
@@ -263,5 +327,23 @@ const styles = StyleSheet.create({
   map: {
     width: '100%',
     height: '100%',
+  },
+  calloutContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 8,
+    maxWidth: 200,
+    maxHeight: 100,
+  },
+  calloutImage: {
+    width: 32,
+    height: 32,
+    marginRight: 8,
+  },
+  calloutText: {
+    fontSize: 16,
+  },
+  calloutDescription: {
+    fontSize: 14,
   },
 });

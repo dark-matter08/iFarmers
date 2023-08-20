@@ -47,6 +47,9 @@ target 'iFarmers' do
   pod 'FirebaseInstallations', :modular_headers => true
   pod 'GoogleDataTransport', :modular_headers => true
   pod 'GoogleUtilities', :modular_headers => true
+  pod 'FirebaseAppCheckInterop', :modular_headers => true
+  pod 'FirebaseAuthInterop', :modular_headers => true
+  pod 'GTMSessionFetcher', :modular_headers => true
   pod 'nanopb', :modular_headers => true
 # @generated end react-native-maps
   config = use_native_modules!

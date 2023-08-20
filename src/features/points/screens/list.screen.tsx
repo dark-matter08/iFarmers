@@ -15,12 +15,16 @@ import { useTheme } from '@react-navigation/native';
 // import { db } from '../../../../firebaseConfig';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { EditModal } from '../components/edit-modal.component';
+import { Point } from '../components/point.component';
+import { PointsMore } from '../../../components/points-more.component';
 
 export const ListScreen = () => {
   const { user } = useSelector((state: any) => state.auth);
   const [userPoints, setUserPoints] = useState<any[]>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [active, setActive] = useState<any>();
+  const [showMore, setShowMore] = useState(false);
   const { colors } = useTheme();
 
   useEffect(() => {
@@ -112,6 +116,34 @@ export const ListScreen = () => {
           <Ionicons name={'filter'} size={25} color={theme.GOLD} />
         </TouchableOpacity>
       </View>
+
+      <View
+        style={{
+          paddingHorizontal: 23,
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginTop: 10,
+        }}>
+        {userPoints?.length === 0 ? (
+          <View>
+            <Text>You have added no locations</Text>
+          </View>
+        ) : (
+          <>
+            {userPoints?.map((x, index) => {
+              return (
+                <Point
+                  location={x}
+                  key={index}
+                  setActive={setActive}
+                  setShowMore={setShowMore}
+                />
+              );
+            })}
+          </>
+        )}
+      </View>
+
       <TouchableOpacity
         onPress={() => setModalVisible(true)}
         style={{
@@ -134,6 +166,11 @@ export const ListScreen = () => {
         <Ionicons name={'add-outline'} size={50} color={theme.GOLD} />
       </TouchableOpacity>
       <EditModal visible={modalVisible} setVisible={setModalVisible} />
+      <PointsMore
+        location={active}
+        visible={showMore}
+        setVisible={setShowMore}
+      />
     </View>
   );
 };
